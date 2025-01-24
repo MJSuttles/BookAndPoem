@@ -38,7 +38,7 @@ void DisplayMenu(string greeting)
                 break;
 
             case "2":
-                // method
+                DeleteProduct(products, productTypes);
                 break;
 
             case "3":
@@ -79,7 +79,42 @@ void DisplayAllProducts(List<Product> products, List<ProductType> productTypes)
 
 void DeleteProduct(List<Product> products, List<ProductType> productTypes)
 {
-    throw new NotImplementedException();
+    Product deletedProduct = null;
+
+    while (deletedProduct == null)
+    {
+        Console.WriteLine("Available products: ");
+        for (int i = 0; i < products.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {products[i].Name}");
+        }
+
+        Console.WriteLine("Please enter a product number: ");
+
+        try
+        {
+            int response = int.Parse(Console.ReadLine().Trim());
+
+            if (response < 1 || response > products.Count)
+            {
+                Console.WriteLine("Please enter a valid product number.");
+                continue;
+            }
+
+            deletedProduct = products[response - 1];
+            products.RemoveAt(response - 1);
+
+            Console.WriteLine($"You deleted {deletedProduct.Name}. Congratulations!");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Please type only integers.");
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("An error occurred.  Please try again");
+        }
+    }
 }
 
 void AddProduct(List<Product> products, List<ProductType> productTypes)
