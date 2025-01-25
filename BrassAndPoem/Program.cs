@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 List<ProductType> productTypes = new List<ProductType>
 {
@@ -46,7 +47,7 @@ void DisplayMenu(string greeting)
                 break;
 
             case "4":
-                // method
+                UpdateProduct(products, productTypes);
                 break;
 
             case "5":
@@ -152,7 +153,53 @@ void AddProduct(List<Product> products, List<ProductType> productTypes)
 
 void UpdateProduct(List<Product> products, List<ProductType> productTypes)
 {
-    throw new NotImplementedException();
+    Console.WriteLine("Available products to update: ");
+    for (int i = 0; i < products.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {products[i].Name} - {products[i].Price}");
+    }
+
+    Console.WriteLine("Enter the number of the product you want to update: ");
+
+    if (int.TryParse(Console.ReadLine(), out int productNumber) && productNumber > 0 && productNumber <= products.Count)
+    {
+        Product selectedProduct = products[productNumber - 1];
+
+        Console.WriteLine($"Updating product: {selectedProduct.Name}");
+
+        Console.WriteLine("Enter the new name of the product: ");
+        string newName = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newName))
+        {
+            selectedProduct.Name = newName;
+        }
+
+        Console.WriteLine("Enter the new price of the product: ");
+        string priceInput = Console.ReadLine();
+        if (decimal.TryParse(priceInput, out decimal newPrice))
+        {
+            selectedProduct.Price = newPrice;
+        }
+
+        Console.WriteLine("Select the product type: ");
+        foreach (ProductType type in productTypes)
+        {
+            Console.WriteLine($"{type.Id}. {type.Title}");
+        }
+
+        string typeIdInput = Console.ReadLine();
+        if (int.TryParse(typeIdInput, out int newTypeId) && productTypes.Any(t => t.Id == newTypeId))
+        {
+            selectedProduct.ProductTypeId = newTypeId;
+            selectedProduct.ProductType = productTypes.First(t => t.Id == newTypeId);
+        }
+
+        Console.WriteLine("Product updated successfully!");
+    }
+    else
+    {
+        Console.WriteLine("Product not found.");
+    }
 }
 
 // don't move or change this!
