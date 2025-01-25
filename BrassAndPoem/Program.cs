@@ -42,7 +42,7 @@ void DisplayMenu(string greeting)
                 break;
 
             case "3":
-                // method
+                AddProduct(products, productTypes);
                 break;
 
             case "4":
@@ -119,7 +119,35 @@ void DeleteProduct(List<Product> products, List<ProductType> productTypes)
 
 void AddProduct(List<Product> products, List<ProductType> productTypes)
 {
-    throw new NotImplementedException();
+    Product newProduct = new Product();
+
+    Console.WriteLine("Enter the name of the new product: ");
+    newProduct.Name = Console.ReadLine();
+
+    Console.WriteLine("Enter the price of the new product: ");
+    newProduct.Price = decimal.Parse(Console.ReadLine());
+
+    Console.WriteLine("Select the product type: ");
+    foreach (ProductType type in productTypes)
+    {
+        Console.WriteLine($"{type.Id}. {type.Title}");
+    }
+
+    int typeId = 0;
+    while (!productTypes.Any(t => t.Id == typeId))
+    {
+        Console.WriteLine("Enter the product type ID: ");
+        typeId = int.Parse(Console.ReadLine());
+    }
+
+    newProduct.ProductTypeId = typeId;
+
+    int productId = products.Count > 0 ? products.Max(p => p.ProductTypeId) + 1 : 1;
+    newProduct.ProductTypeId = productId;
+
+    products.Add(newProduct);
+
+    Console.WriteLine("Product added! Congratulations!");
 }
 
 void UpdateProduct(List<Product> products, List<ProductType> productTypes)
